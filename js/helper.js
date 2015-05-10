@@ -58,16 +58,77 @@ var HTMLonlineURL = '<br><a href="#">%data%</a>';
 var internationalizeButton = '<button>Internationalize</button>';
 var googleMap = '<div id="map"></div>';
 
+var work = {
+	"jobs" : [
+		{
+			"employer" : "Booz Allen Hamilton",
+			"title" :"Software Engineer",
+			"location" : "McLean, VA",
+			"datesWorked" : "April 2015 - present",
+			"description" : ["web development", " learning new technologies", " building super awesome websites"]
+		},
+		{
+			"employer" : "AICE, Inc.",
+			"title" : "Research Associate",
+			"location" : "Chevy Chase, MD",
+			"datesWorked" : "2011 - 2014",
+			"description" : ["project management", " writing", " research", " editing", " email and snail mail marketing", " branding"]
+		},
+		{
+			"employer" : "Diarna, the Geo-Museum of Jewish Life in North Africa & the Middle East",
+			"title" : "Summer Intern",
+			"location" : "Cambridge, MA",
+			"datesWorked" : "2011",
+			"description" : ["interviewing", " qualitative research", " writing"]
+		},
+		{
+			"employer" : "The Shalem Center",
+			"title" : "Summer Intern in the President's Office (Dr. Daniel Polisar)",
+			"location" : "Jerusalem, Israel",
+			"datesWorked" : "2009",
+			"description" : ["qualitative and quantitative research", " report writing"]
+		},
+		{
+			"employer" : "The Children's Defense Fund",
+			"title" : "Intern in the President's Office (Marian Wright Edelman)",
+			"location" : "Washington, DC",
+			"datesWorked" : "2008",
+			"description" : ["writing", " research", " handling a range of administrative tasks"]
+		}
+
+	]
+};
 
 /*
 The International Name challenge in Lesson 2 where you'll create a function that will need this helper code to run. Don't delete! It hooks up your code to the button you'll be appending.
 */
 $(document).ready(function() {
   $('button').click(function() {
-    var iName = inName() || function(){};
-    $('#name').html(iName);  
+	var iName = inName() || function(){};
+	$('#name').html(iName);  
   });
 });
+
+
+//create function inName() that takes in a string of 2 names and returns an internationalized version that looks like so: Lisa SNIDER
+function inName(name){
+	// trim whitespace in front of and after name, and then split entire string on whitespace to make 2 substrings with first, last name each
+	name = name.trim().split(" ");
+	console.log(name);
+	//take 2nd/last name and makes the whole string uppercase
+	name[1] = name[1].toUpperCase();
+	// builds the first name with first letter capitalized
+	// slice() with just one index creates a substring from that index to the end of the string
+	// first string (name) = uppercased first letter of first name + rest of first name lowercased
+	name[0] = name[0].slice(0,1).toUpperCase() + name[0].slice(1).toLowerCase();
+	// join() method joins all elements of an array (the names array) into a string
+	return name[0] + " " + name[1];
+}
+
+console.log(inName("lisa snider"));
+//append internationalize button to main div
+$('#main').append(internationalizeButton);
+
 
 /*
 The next few lines about clicks are for the Collecting Click Locations quiz in Lesson 2.
@@ -76,19 +137,37 @@ clickLocations = [];
 
 function logClicks(x,y) {
   clickLocations.push(
-    {
-      x: x,
-      y: y
-    }
+	{
+	  x: x,
+	  y: y
+	}
   );
   console.log('x location: ' + x + '; y location: ' + y);
 }
 
 $(document).click(function(loc) {
-  // your code goes here!
+  // write a function that collects the x and y click values
+  var x = loc.pageX;
+  var y = loc.pageY;
+
+  logClicks(x,y);
 });
 
+// write a function called locationizer(work_obj)
+function locationizer(work_obj){
+  // have it return an array of locations in work object
+  var locationArray = [];
+  
+  for (job in work_obj.jobs){
+	var newLocation = work_obj.jobs[job].location;
+	locationArray.push(newLocation);
+  }
 
+  return locationArray;
+
+} 
+
+console.log(locationizer(work));
 
 /*
 This is the fun part. Here's where we generate the custom Google Map for the website.
@@ -106,7 +185,7 @@ function initializeMap() {
   var locations;
 
   var mapOptions = {
-    disableDefaultUI: true
+	disableDefaultUI: true
   };
 
   // This next line makes `map` a new Google Map JavaScript Object and attaches it to
@@ -120,25 +199,25 @@ function initializeMap() {
   */
   function locationFinder() {
 
-    // initializes an empty array
-    var locations = [];
+	// initializes an empty array
+	var locations = [];
 
-    // adds the single location property from bio to the locations array
-    locations.push(bio.contacts.location);
+	// adds the single location property from bio to the locations array
+	locations.push(bio.contacts.location);
 
-    // iterates through school locations and appends each location to
-    // the locations array
-    for (var school in education.schools) {
-      locations.push(education.schools[school].location);
-    }
+	// iterates through school locations and appends each location to
+	// the locations array
+	for (var school in education.schools) {
+	  locations.push(education.schools[school].location);
+	}
 
-    // iterates through work locations and appends each location to
-    // the locations array
-    for (var job in work.jobs) {
-      locations.push(work.jobs[job].location);
-    }
+	// iterates through work locations and appends each location to
+	// the locations array
+	for (var job in work.jobs) {
+	  locations.push(work.jobs[job].location);
+	}
 
-    return locations;
+	return locations;
   }
 
   /*
@@ -148,38 +227,38 @@ function initializeMap() {
   */
   function createMapMarker(placeData) {
 
-    // The next lines save location data from the search result object to local variables
-    var lat = placeData.geometry.location.lat();  // latitude from the place service
-    var lon = placeData.geometry.location.lng();  // longitude from the place service
-    var name = placeData.formatted_address;   // name of the place from the place service
-    var bounds = window.mapBounds;            // current boundaries of the map window
+	// The next lines save location data from the search result object to local variables
+	var lat = placeData.geometry.location.lat();  // latitude from the place service
+	var lon = placeData.geometry.location.lng();  // longitude from the place service
+	var name = placeData.formatted_address;   // name of the place from the place service
+	var bounds = window.mapBounds;            // current boundaries of the map window
 
-    // marker is an object with additional data about the pin for a single location
-    var marker = new google.maps.Marker({
-      map: map,
-      position: placeData.geometry.location,
-      title: name
-    });
+	// marker is an object with additional data about the pin for a single location
+	var marker = new google.maps.Marker({
+	  map: map,
+	  position: placeData.geometry.location,
+	  title: name
+	});
 
-    // infoWindows are the little helper windows that open when you click
-    // or hover over a pin on a map. They usually contain more information
-    // about a location.
-    var infoWindow = new google.maps.InfoWindow({
-      content: name
-    });
+	// infoWindows are the little helper windows that open when you click
+	// or hover over a pin on a map. They usually contain more information
+	// about a location.
+	var infoWindow = new google.maps.InfoWindow({
+	  content: name
+	});
 
-    // hmmmm, I wonder what this is about...
-    google.maps.event.addListener(marker, 'click', function() {
-      // your code goes here!
-    });
+	// hmmmm, I wonder what this is about...
+	google.maps.event.addListener(marker, 'click', function() {
+	  // your code goes here!
+	});
 
-    // this is where the pin actually gets added to the map.
-    // bounds.extend() takes in a map location object
-    bounds.extend(new google.maps.LatLng(lat, lon));
-    // fit the map to the new marker
-    map.fitBounds(bounds);
-    // center the map
-    map.setCenter(bounds.getCenter());
+	// this is where the pin actually gets added to the map.
+	// bounds.extend() takes in a map location object
+	bounds.extend(new google.maps.LatLng(lat, lon));
+	// fit the map to the new marker
+	map.fitBounds(bounds);
+	// center the map
+	map.setCenter(bounds.getCenter());
   }
 
   /*
@@ -187,9 +266,9 @@ function initializeMap() {
   If so, it creates a new map marker for that location.
   */
   function callback(results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      createMapMarker(results[0]);
-    }
+	if (status == google.maps.places.PlacesServiceStatus.OK) {
+	  createMapMarker(results[0]);
+	}
   }
 
   /*
@@ -198,22 +277,22 @@ function initializeMap() {
   */
   function pinPoster(locations) {
 
-    // creates a Google place search service object. PlacesService does the work of
-    // actually searching for location data.
-    var service = new google.maps.places.PlacesService(map);
+	// creates a Google place search service object. PlacesService does the work of
+	// actually searching for location data.
+	var service = new google.maps.places.PlacesService(map);
 
-    // Iterates through the array of locations, creates a search object for each location
-    for (var place in locations) {
+	// Iterates through the array of locations, creates a search object for each location
+	for (var place in locations) {
 
-      // the search request object
-      var request = {
-        query: locations[place]
-      };
+	  // the search request object
+	  var request = {
+		query: locations[place]
+	  };
 
-      // Actually searches the Google Maps API for location data and runs the callback
-      // function with the search results after each search.
-      service.textSearch(request, callback);
-    }
+	  // Actually searches the Google Maps API for location data and runs the callback
+	  // function with the search results after each search.
+	  service.textSearch(request, callback);
+	}
   }
 
   // Sets the boundaries of the map based on pin locations

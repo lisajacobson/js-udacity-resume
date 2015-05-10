@@ -5,41 +5,71 @@ var work = {
 		{
 			"employer" : "Booz Allen Hamilton",
 			"title" :"Software Engineer",
-			"location" : "Washington, D.C.",
+			"location" : "McLean, VA",
 			"datesWorked" : "April 2015 - present",
-			"description" : "web development"
+			"description" : ["web development", " learning new technologies", " building super awesome websites"]
 		},
 		{
 			"employer" : "AICE, Inc.",
 			"title" : "Research Associate",
-			"location" : "Chevy Chase, Maryland",
-			"datesWorked" : "August 2011 - June 2014",
-			"description" : ["writing", "research", "editing"]
+			"location" : "Chevy Chase, MD",
+			"datesWorked" : "2011 - 2014",
+			"description" : ["project management", " writing", " research", " editing", " email and snail mail marketing", " branding"]
+		},
+		{
+			"employer" : "Diarna, the Geo-Museum of Jewish Life in North Africa & the Middle East",
+			"title" : "Summer Intern",
+			"location" : "Cambridge, MA",
+			"datesWorked" : "2011",
+			"description" : ["interviewing", " qualitative research", " writing"]
+		},
+		{
+			"employer" : "The Shalem Center",
+			"title" : "Summer Intern in the President's Office (Dr. Daniel Polisar)",
+			"location" : "Jerusalem, Israel",
+			"datesWorked" : "2009",
+			"description" : ["qualitative and quantitative research", " report writing"]
+		},
+		{
+			"employer" : "The Children's Defense Fund",
+			"title" : "Intern in the President's Office (Marian Wright Edelman)",
+			"location" : "Washington, DC",
+			"datesWorked" : "2008",
+			"description" : ["writing", " research", " handling a range of administrative tasks"]
 		}
+
 	]
 };
 
-//write a for-in loop that iterates over all the jobs in your work object and .append()s a new HTMLworkStart element for each one
-for (job in work.jobs){
-	console.log(work[job]);
 
-	$('#workExperience').append(HTMLworkStart);
+function displayWork(){
+	//write a for-in loop that iterates over all the jobs in your work object and .append()s a new HTMLworkStart element for each one
+	for (job in work.jobs){
 
-	//formats each job's employer with HTMLworkEmployer 
-	// var HTMLworkEmployer = '<a href="#">%data%';
-	var formattedEmployer = HTMLworkEmployer.replace('%data%', work.jobs[job].employer);
-	// console.log(formattedEmployer);
+		$('#workExperience').append(HTMLworkStart);
 
-	// and each job title with HTMLworkTitle
-	// var HTMLworkTitle = ' - %data%</a>';
-	var formattedTitle = HTMLworkTitle.replace('%data%', work.jobs[job].title);
+		//formats each job's employer with HTMLworkEmployer 
+		// var HTMLworkEmployer = '<a href="#">%data%';
+		var formattedEmployer = HTMLworkEmployer.replace('%data%', work.jobs[job].employer);
+		// console.log(formattedEmployer);
 
-	var formattedEmployerTitle = formattedEmployer + formattedTitle
-	// and .append()s a concatenation of employer and title each to the element with class work-entry:last
-	$('.work-entry:last').append(formattedEmployerTitle);
+		// and each job title with HTMLworkTitle
+		// var HTMLworkTitle = ' - %data%</a>';
+		var formattedTitle = HTMLworkTitle.replace('%data%', work.jobs[job].title);
 
+		var formattedLocation = HTMLworkLocation.replace('%data%', work.jobs[job].location);
+
+		var formattedDates = HTMLworkDates.replace('%data%', work.jobs[job].datesWorked);
+
+		var formattedDescrip = HTMLworkDescription.replace('%data%', work.jobs[job].description);
+
+		var formattedEverything = formattedEmployer + formattedTitle + formattedLocation + formattedDates + formattedDescrip
+		// and .append()s a concatenation of employer and title each to the element with class work-entry:last
+		$('.work-entry:last').append(formattedEverything);
+	}
 }
 
+displayWork();
 
 // projects contains an array of projects. Each project object in projects should contain a title, dates worked, description, and an images array with URL strings for project images.
 
